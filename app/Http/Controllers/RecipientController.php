@@ -38,7 +38,7 @@ class RecipientController extends Controller
 
         // Generate unique QR code
         $qrCode = $this->generateUniqueQrCode();
-        
+
         $recipient = Recipient::create(array_merge($request->all(), [
             'qr_code' => $qrCode
         ]));
@@ -88,7 +88,7 @@ class RecipientController extends Controller
     public function generateQrCode(Recipient $recipient)
     {
         $encryptedCode = base64_encode($recipient->qr_code . '|' . $recipient->id);
-        
+
         $qrCode = QrCode::size(200)
             ->format('png')
             ->generate($encryptedCode);
@@ -100,9 +100,9 @@ class RecipientController extends Controller
     public function printQrCode(Recipient $recipient)
     {
         $encryptedCode = base64_encode($recipient->qr_code . '|' . $recipient->id);
-        
+
         $pdf = Pdf::loadView('recipients.qr-print', compact('recipient', 'encryptedCode'));
-        
+
         return $pdf->download('qr-code-' . $recipient->qr_code . '.pdf');
     }
 
@@ -120,7 +120,7 @@ class RecipientController extends Controller
         try {
             $decoded = base64_decode($request->qr_code);
             $parts = explode('|', $decoded);
-            
+
             if (count($parts) !== 2) {
                 return response()->json(['error' => 'QR Code tidak valid'], 400);
             }
@@ -183,9 +183,9 @@ class RecipientController extends Controller
         }
 
         $encryptedCode = base64_encode($recipient->qr_code . '|' . $recipient->id);
-        
+
         $pdf = Pdf::loadView('recipients.receipt', compact('recipient', 'encryptedCode'));
-        
+
         return $pdf->download('bukti-penerimaan-' . $recipient->qr_code . '.pdf');
     }
 
@@ -195,7 +195,7 @@ class RecipientController extends Controller
             // Get the next available number
             $lastRecipient = Recipient::orderBy('id', 'desc')->first();
             $nextNumber = $lastRecipient ? $lastRecipient->id + 1 : 1;
-            
+
             $qrCode = 'CBP' . str_pad($nextNumber, 4, '0', STR_PAD_LEFT);
         } while (Recipient::where('qr_code', $qrCode)->exists());
 

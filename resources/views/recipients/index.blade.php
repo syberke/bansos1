@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="d-flex justify-content-between align-items-center mb-4">
-    <h2>Data Penerima Bansos</h2>
+
     <a href="{{ route('recipients.create') }}" class="btn btn-primary">
         <i class="fas fa-plus me-2"></i>Tambah Penerima
     </a>
@@ -58,7 +58,7 @@
                                             <i class="fas fa-file-pdf"></i>
                                         </a>
                                     @endif
-                                    <form action="{{ route('recipients.destroy', $recipient) }}" method="POST" class="d-inline" 
+                                    <form action="{{ route('recipients.destroy', $recipient) }}" method="POST" class="d-inline"
                                           onsubmit="return confirm('Yakin ingin menghapus data ini?')">
                                         @csrf
                                         @method('DELETE')
@@ -77,7 +77,7 @@
                 </tbody>
             </table>
         </div>
-        
+
         <div class="d-flex justify-content-center">
             {{ $recipients->links() }}
         </div>
